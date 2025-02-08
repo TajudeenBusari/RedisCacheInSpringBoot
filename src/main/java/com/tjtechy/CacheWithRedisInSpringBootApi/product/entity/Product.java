@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,12 +18,13 @@ public class Product implements Serializable {
   private String productCategory;
   private String productDescription;
   private double productPrice;
-  private Date productionDate;
-  private Date expiryDate;
+  private LocalDateTime productionDate;
+  private LocalDate expiryDate;
+
 
   public Product() {
   }
-  public Product(UUID productId, String productName, String productCategory, String productDescription, double productPrice, Date productionDate, Date expiryDate) {
+  public Product(UUID productId, String productName, String productCategory, String productDescription, double productPrice, LocalDateTime productionDate, LocalDate expiryDate) {
     this.productId = productId;
     this.productName = productName;
     this.productCategory = productCategory;
@@ -60,16 +63,16 @@ public class Product implements Serializable {
   public void setProductPrice(double productPrice) {
     this.productPrice = productPrice;
   }
-  public Date getProductionDate() {
+  public LocalDateTime getProductionDate() {
     return productionDate;
   }
-  public void setProductionDate(Date productionDate) {
+  public void setProductionDate(LocalDateTime productionDate) {
     this.productionDate = productionDate;
   }
-  public Date getExpiryDate() {
+  public LocalDate getExpiryDate() {
     return expiryDate;
   }
-  public void setExpiryDate(Date expiryDate) {
+  public void setExpiryDate(LocalDate expiryDate) {
     this.expiryDate = expiryDate;
   }
 
