@@ -1,8 +1,14 @@
 package com.tjtechy.CacheWithRedisInSpringBootApi.product.entity.dto;
 
-public record ProductDto(String productName,
+import java.time.LocalDate;
+import java.util.UUID;
+
+public record ProductDto( UUID productId,
+                         String productName,
                          String productCategory,
                          String productDescription,
-                         double productPrice) {
+                         double productPrice,
+                         LocalDate expiryDate
+                         ) {
 
 }
