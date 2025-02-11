@@ -80,5 +80,16 @@ public class ProductController {
     return new Result("Delete Success", true, null, StatusCode.SUCCESS);
   }
 
+  @DeleteMapping("/clear-cache")
+  /**
+   * This method is used to clear all cache
+   * and return a success message
+   * if the cache is cleared successfully
+   */
+  public Result clearAllCache(){
+    productService.clearAllCache();
+    return new Result("Clear Cache Success", true, null, StatusCode.SUCCESS);
+  }
+
 
 }

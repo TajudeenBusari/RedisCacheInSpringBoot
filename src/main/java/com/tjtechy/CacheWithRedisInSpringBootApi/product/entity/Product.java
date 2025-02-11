@@ -1,5 +1,6 @@
 package com.tjtechy.CacheWithRedisInSpringBootApi.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -18,7 +19,9 @@ public class Product implements Serializable {
   private String productCategory;
   private String productDescription;
   private double productPrice;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime productionDate;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate expiryDate;
 
 

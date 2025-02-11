@@ -4,6 +4,9 @@ import com.tjtechy.CacheWithRedisInSpringBootApi.product.entity.Product;
 import com.tjtechy.CacheWithRedisInSpringBootApi.product.exception.ProductNotFoundException;
 import com.tjtechy.CacheWithRedisInSpringBootApi.product.repository.ProductRepository;
 import com.tjtechy.CacheWithRedisInSpringBootApi.product.service.ProductService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,13 +20,16 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
     }
 
+
+    @Cacheable(value = "products") //store in "products" cache
     @Override
     public List<Product> getAllProducts() {
-
+        System.out.println("*******Fetching products from database*******");
         var products = productRepository.findAll();
         return products;
     }
 
+    @Cacheable(value = "product", key = "#productId") //store in "products" cache with key as id
     @Override
     public Product getProductById(UUID productId) {
         var foundProduct = productRepository
@@ -32,12 +38,20 @@ public class ProductServiceImpl implements ProductService {
         return foundProduct;
     }
 
+    @CachePut(value = "product", key = "#product.productId") //store in "products" cache with key as id
     @Override
     public Product saveProduct(Product product) {
 
         return productRepository.save(product);
     }
 
+    /***
+     * Update product
+     * Remove the production date and expiry date from the updateProduct method,
+     * as they are not part of the update request dto.
+     * User should not be able to update the production date and expiry date of a product.
+     */
+    @CachePut(value = "product", key = "#productId") //update cache with new value
     @Override
     public Product updateProduct(UUID productId, Product product) {
         var foundProduct = productRepository.findById(productId)
@@ -46,18 +60,26 @@ public class ProductServiceImpl implements ProductService {
         foundProduct.setProductCategory(product.getProductCategory());
         foundProduct.setProductDescription(product.getProductDescription());
         foundProduct.setProductPrice(product.getProductPrice());
-        foundProduct.setProductionDate(product.getProductionDate());
-        foundProduct.setExpiryDate(product.getExpiryDate());
+
+        //foundProduct.setProductionDate(product.getProductionDate());
+        //foundProduct.setExpiryDate(product.getExpiryDate());
         return productRepository.save(foundProduct);
 
     }
 
+    @CacheEvict(value = "product", key = "#productId") //delete cache with key as id
     @Override
     public void deleteProduct(UUID productId) {
         productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
         productRepository.deleteById(productId);
 
+    }
+
+    @CacheEvict(value = "products", allEntries = true) //delete all cache
+    @Override
+    public void clearAllCache() {
+        System.out.println("*******Clearing all cache*******");
     }
 }
 /**From java 21 above, the JDK restricts the ability of libraries to attach a Java agent

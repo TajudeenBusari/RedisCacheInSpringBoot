@@ -197,6 +197,7 @@ class ProductControllerTest {
             "test product1 category",
             "test product1 description",
             1000
+
     );
 
     var json = objectMapper.writeValueAsString(updateProductRequestDto);
